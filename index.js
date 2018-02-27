@@ -1,6 +1,6 @@
 'use strict';
 const ipaddr = require('ipaddr.js');
-process.env[‘PATH’] = process.env[‘PATH’] + ‘:’ + process.env[‘LAMBDA_TASK_ROOT’]
+process.env['PATH'] = process.env['PATH'] + ':' +  process.env['LAMBDA_TASK_ROOT']
 
 console.log('Loading function');
 /**
@@ -341,9 +341,9 @@ exports.handler = (event, context, callback) => {
     const principalId = 'user|a1b2c3d4';
     const sourceIp = ipaddr.parse(event.requestContext.identity.sourceIp);
     console.log('Source IP:',sourceIp);
-    console.log('Required IP Range',process.env['AUTHORIZED_IP_RANGE'];
+    console.log('Required IP Range',process.env['AUTHORIZED_IP_RANGE']);
     //Split the commar seperated list of CIDRs into a list of authorized ranges
-    let authorizedIpRanges = process.env.['AUTHORIZED_IP_RANGE'].split(',').map((currIpRange) => {
+    let authorizedIpRanges = process.env['AUTHORIZED_IP_RANGE'].split(',').map((currIpRange) => {
       return ipaddr.parseCIDR(currIpRange);
     });
 
@@ -354,7 +354,7 @@ exports.handler = (event, context, callback) => {
 
     //Anything not authorized = unknown
     let sourceIpRange = ipaddr.subnetMatch(sourceIp, authorizedRangeList, 'unknown');
-    
+
     if (sourceIpRange == 'unknown') {
       // you can send a 401 Unauthorized response to the client by failing like so:
       // callback('Unauthorized');
